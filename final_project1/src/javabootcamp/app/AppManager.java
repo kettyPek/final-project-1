@@ -1,16 +1,18 @@
 package javabootcamp.app;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Scanner;
 
+import javabootcamp.credentials.LogInCredentials;
 import javabootcamp.person.AccountOwner;
 
 public class AppManager {
 	
 	Scanner scanner = new Scanner(System.in);
 	
-	protected AccountOwner currentUser;
-	protected AccountOwner [] users;
+	protected AccountOwner currentUser = null;
+	protected AccountOwner [] users = {};
 	
 	
 	public void manageApp() {
@@ -22,7 +24,8 @@ public class AppManager {
 	
 	private void displayMenu() {
 		System.out.println("please choose:");
-		System.out.println("1 - login");		
+		System.out.println("1 - login");
+		System.out.println("2 - open new account");
 	}
 	
 	private void startAction() {
@@ -30,6 +33,9 @@ public class AppManager {
 		switch(action) {
 		case 1:
 			logIn();
+			break;
+		case 2:
+			openAccount();
 			break;
 		}
 	}
@@ -56,6 +62,78 @@ public class AppManager {
 			AccountOwnerMenu();
 	}
 	
+	private void openAccount() {
+		System.out.println("Enter phone number:");
+		long phoneNumber = scanner.nextLong();
+		if(checkIfAccountExists(phoneNumber))
+			System.out.println("You alredy have bank account");
+		else {
+			createAccountOwner(phoneNumber);
+			createCredentials();
+			addCurrentUserToUsersArray();
+			System.out.println("Congrats you opend new account");
+		}
+	}
+	
+	private boolean checkIfAccountExists(long phoneNumber) {
+		for(AccountOwner user: users)
+			if(user.getPhoneNumber()==phoneNumber)
+				return true;
+		return false;
+	}
+	
+	private void createAccountOwner(long phoneNumber) {
+		System.out.println("Enter first name:");
+		String firstName = scanner.next();
+		System.out.println("Enter last name:");
+		String lastName = scanner.next();
+		System.out.println("Enter birth date in format: year-month-day");
+		String birthDateString = scanner.next();
+		LocalDate birthDate = LocalDate.parse(birthDateString);
+		System.out.println("Enter monthly income:");
+		double monthlyIncome = scanner.nextDouble();
+		currentUser = new AccountOwner(firstName, lastName, phoneNumber, birthDate, monthlyIncome);
+	}
+	
+	private void createCredentials() {
+		String username;
+		String password;
+		do {
+			System.out.println("Enter username:");
+			username = scanner.next();
+			if(LogInCredentials.usernameIsValid(username)) {
+				if(userNameIsUnique(username)) {
+					do {
+						System.out.println("Enter password:");
+						password = scanner.next();
+						if(LogInCredentials.passwordIsValid(password))
+							currentUser.setCredentials(username, password);
+						else
+							System.out.println("password isnt valid, try again");
+					}while(!LogInCredentials.passwordIsValid(password));
+				}
+			}
+			else
+				System.out.println("username incorrect, try again");	
+		}while(!LogInCredentials.usernameIsValid(username));
+	}
+	
+	private void addCurrentUserToUsersArray() {
+		AccountOwner [] updatedUsers = new AccountOwner [users.length+1];
+		for(int i=0; i<users.length; i++)
+			updatedUsers[i] = users[i];
+		updatedUsers[users.length] = currentUser;
+		users = updatedUsers;	
+	}
+	
+	private boolean userNameIsUnique(String username) {
+		for(AccountOwner user: users) 
+			if(user.getCredentials().getUsername().equals(username))
+				return false;
+		return true;	
+	}
+	
+	//
 	private void credentialsAreCorrect(String userName, String password) {
 		for(AccountOwner owner : users) 
 			if(userName.matches(owner.getCredentials().getUsername())) 
@@ -69,7 +147,9 @@ public class AppManager {
 		return release;
 	}
 	
-	private void AccountOwnerMenu() {
-		
+	private void AccountOwnerMenu() {	
+		//TODO finish method
 	}
+	
+	
 }
