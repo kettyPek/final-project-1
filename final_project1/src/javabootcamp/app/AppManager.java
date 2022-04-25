@@ -71,7 +71,7 @@ public class AppManager {
 			createAccountOwner(phoneNumber);
 			createCredentials();
 			addCurrentUserToUsersArray();
-			System.out.println("Congrats you opend new account");
+			System.out.println("Request submitted successfully, manager aprroval required");
 		}
 	}
 	
@@ -133,7 +133,6 @@ public class AppManager {
 		return true;	
 	}
 	
-	//
 	private void credentialsAreCorrect(String userName, String password) {
 		for(AccountOwner owner : users) 
 			if(userName.matches(owner.getCredentials().getUsername())) 
