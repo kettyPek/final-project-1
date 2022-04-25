@@ -9,8 +9,8 @@ public enum AccountType {
 	
 	private final float minInterestRate;
 	private final float maxInterestRate;
-	private final float minAperationFee;
-	private final float maxAperationFee;
+	private final float minOperationFee;
+	private final float maxOperationFee;
 	private final int maxLoanAmount;
 	private final int maxWithdrawalAmount;
 	
@@ -20,11 +20,34 @@ public enum AccountType {
 		
 		this.minInterestRate = minInterestRate;
 		this.maxInterestRate = maxInterestRate;
-		this.minAperationFee = minAperationFee;
-		this.maxAperationFee = maxAperationFee;
+		this.minOperationFee = minAperationFee;
+		this.maxOperationFee = maxAperationFee;
 		this.maxLoanAmount = maxLoanAmount;
 		this.maxWithdrawalAmount = maxWithdrawalAmount;
 	}
-		
-
+	
+	public float getMinInterestRate() {
+		return minInterestRate;
+	}
+	
+	public float getMaxInterestRate() {
+		return maxInterestRate;
+	}
+	
+	public float getMinOperationFee() {
+		return minOperationFee;
+	}
+	public float getMaxOperationFee() {
+		return maxOperationFee;
+	}
+	
+	public int getNaxLoanAmount() {
+		return maxLoanAmount;
+	}
+	
+	public int getMaxWithdrawalAmount() {
+		return maxWithdrawalAmount;
+	}
+	
+	
 }
