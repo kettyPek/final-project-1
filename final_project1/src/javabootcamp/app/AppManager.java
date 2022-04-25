@@ -5,6 +5,7 @@ import java.time.LocalTime;
 import java.util.Scanner;
 
 import javabootcamp.credentials.LogInCredentials;
+import javabootcamp.menu.AppMenu;
 import javabootcamp.person.AccountOwner;
 
 public class AppManager {
@@ -15,17 +16,10 @@ public class AppManager {
 	protected AccountOwner [] users = {};
 	
 	
-	public void manageApp() {
-		
-		displayMenu();
+	public void startApp() {
+		AppMenu.displayMainMenu();
 		startAction();
 		scanner.close();	
-	}
-	
-	private void displayMenu() {
-		System.out.println("please choose:");
-		System.out.println("1 - login");
-		System.out.println("2 - open new account");
 	}
 	
 	private void startAction() {
