@@ -1,9 +1,13 @@
 package javabootcamp.runner;
 
+import javabootcamp.app.AppManager;
+
 public class Runner {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		
+		AppManager app = new AppManager();
+		app.manageApp();
 
 	}
 
