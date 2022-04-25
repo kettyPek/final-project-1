@@ -3,6 +3,7 @@ package javabootcamp.person;
 import java.time.LocalDate;
 
 import javabootcamp.account.Account;
+import javabootcamp.account.AccountType;
 import javabootcamp.credentials.LogInCredentials;
 
 public class AccountOwner extends Person{
@@ -24,6 +25,14 @@ public class AccountOwner extends Person{
 		return credentials;
 	}
 	
+	public double getMonthlyIncome() {
+		return monthlyIncome;
+	}
+	
+	public Account getAccount() {
+		return account;
+	}
+	
 	public long getPhoneNumber() {
 		return super.phoneNumber;
 	}
@@ -31,6 +40,10 @@ public class AccountOwner extends Person{
 	public void makeDeposit(double depositFunds) {
 		account.deposit(depositFunds);
 		System.out.println("Successful deposit");
+	}
+	
+	public void createAccountByManager(AccountType accountType,float intersetTare, float operationFee) {
+		account = new Account(accountType,intersetTare,operationFee);
 	}
 	
 }
