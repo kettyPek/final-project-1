@@ -1,8 +1,12 @@
 package javabootcamp.actions;
-
+/**
+ * Contains bill types which can be payed by the user
+ * @author ketty
+ *
+ */
 public enum BillType {
 
-	BANK,
+	BANK,//loan return
 	PHONE_COMPANY,
 	WATER_COMPANY,
 	ELECTRIC_COMPANY;
@@ -22,6 +26,9 @@ public enum BillType {
 		}
 	}
 	
+	/**
+	 * Displays bill types as options
+	 */
 	public static void diaplayBillTypes() {
 		System.out.println("1 - bank");
 		System.out.println("2 - phone company");
