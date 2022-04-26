@@ -1,5 +1,7 @@
 package javabootcamp.credentials;
 
+import javabootcamp.person.AccountOwner;
+
 public class LogInCredentials {
 	
 	protected String username;
@@ -47,5 +49,7 @@ public class LogInCredentials {
 			return false;
 		return true;
 	}
+	
+	
 	
 }
