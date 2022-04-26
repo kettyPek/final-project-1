@@ -1,7 +1,11 @@
 package javabootcamp.person;
 
 import java.time.LocalDate;
-
+/**
+ * Represents a person
+ * @author ketty
+ *
+ */
 public abstract class Person { 
 	
 	protected String firstName;
