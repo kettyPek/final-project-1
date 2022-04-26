@@ -1,5 +1,9 @@
 package javabootcamp.actions;
-
+/**
+ * Contains possible activities that can be made in the bank application
+ * @author ketty
+ *
+ */
 public enum ActivityName {
 	
 	DEPOSIT,
