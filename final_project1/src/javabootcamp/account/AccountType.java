@@ -1,11 +1,16 @@
 package javabootcamp.account;
-
+/**
+ * Contains possible account types, every account type has its own interest rate range, opearation fee range,
+ * max loan amount and max withdrawal amount
+ * @author ketty
+ *
+ */
 public enum AccountType {
 	
 	BRONZE(4.5f,6f,5f,7.5f,10000,2500),
 	SILVER(3f,4.5f,3.8f,5f,20000,4000),
 	GOLD(1.5f,3f,1.75f,3.8f,50000,6000),
-	TITANIUM(0f,0f,0f,0f,0,0);
+	TITANIUM(0f,0f,0f,0f,0,0); // Bank manager account type
 	
 	private final float minInterestRate;
 	private final float maxInterestRate;
