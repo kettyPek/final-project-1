@@ -8,6 +8,10 @@ public class Runner {
 		
 		AppManager app = new AppManager();
 		app.startApp();
+		app.startApp();
+		app.startApp();
+		app.startApp();
+		
 
 	}
 
