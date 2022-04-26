@@ -10,10 +10,12 @@ import javabootcamp.menu.AppMenu;
 import javabootcamp.person.AccountOwner;
 import javabootcamp.person.BankManager;
 import javabootcamp.utils.Utils;
-
+/**
+ * This class manage bank application
+ * @author ketty
+ *
+ */
 public class AppManager {
-	
-	
 	
 	protected AccountOwner currentUser = null;
 	protected static AccountOwner [] users = {};
@@ -86,6 +88,9 @@ public class AppManager {
 		System.out.println("You are blocked for 30 minutes, release time: " + getReleaseTimeAfterBlock()); 	
 	}
 	
+	/**
+	 * Activate open account option from main menu 
+	 */
 	private void openAccount() {
 		System.out.println("Enter phone number:");
 		long phoneNumber = Utils.scanner.nextLong();
@@ -108,7 +113,12 @@ public class AppManager {
 		AppMenu.exitMainMenu();
 		Utils.scanner.close();
 	}
-	//
+	
+	/**
+	 * Checks by given phone number if an account exist with same phone number
+	 * @param phoneNumber - phone number of user
+	 * @return true if account exist in users array, else returns false
+	 */
 	private boolean checkIfAccountExists(long phoneNumber) {
 		for(AccountOwner user: users)
 			if(user.getPhoneNumber()==phoneNumber)
@@ -116,6 +126,10 @@ public class AppManager {
 		return false;
 	}
 	
+	/**
+	 * Creates account owner object for applicant by given phone number
+	 * @param phoneNumber - phone number of the applicant
+	 */
 	private void createAccountOwner(long phoneNumber) {
 		System.out.println("Enter first name:");
 		String firstName = Utils.scanner.next();
@@ -129,6 +143,9 @@ public class AppManager {
 		currentUser = new AccountOwner(firstName, lastName, phoneNumber, birthDate, monthlyIncome,bankManager);
 	}
 	
+	/**
+	 * Creates credentials for application user
+	 */
 	private void createCredentials() {
 		String username;
 		String password;
@@ -150,6 +167,11 @@ public class AppManager {
 		}while(!usernameCanBeSet(username));
 	}
 	
+	/**
+	 * Checks if username is unique
+	 * @param username - userrname to check
+	 * @return true if unique, else false
+	 */
 	private boolean userNameIsUnique(String username) {
 		for(AccountOwner user: users) 
 			if(user.getCredentials().getUsername().equals(username))
@@ -157,10 +179,19 @@ public class AppManager {
 		return true;	
 	}
 	
+	/**
+	 * checks is given username can be set for current user
+	 * @param username - given username
+	 * @return true if username can be set, else return false
+	 */
 	private boolean usernameCanBeSet(String username) {
 		return userNameIsUnique(username) && LogInCredentials.usernameIsValid(username);
 	}
 	
+	/**
+	 * Adds given user to users array
+	 * @param user to add
+	 */
 	private void addUserToUsersArray(AccountOwner user) {
 		AccountOwner [] updatedUsers = new AccountOwner [users.length+1];
 		for(int i=0; i<users.length; i++)
@@ -183,10 +214,10 @@ public class AppManager {
 	}
 	
 	/**
-	 * Checks if the user has account 
+	 * Checks if the user has account already
 	 * @param userName
 	 * @param password
-	 * @return - true if user has account, otherwise false
+	 * @return - true if user has account, else return false
 	 */
 	private boolean userHasAccount(String userName, String password) {
 		AccountOwner user = receiveUserByCredentials(userName,password);
@@ -200,16 +231,20 @@ public class AppManager {
 	}
 	
 	
-	
+	/**
+	 * Receive release time after blocking user
+	 * @return release time
+	 */
 	private LocalTime getReleaseTimeAfterBlock() {
 		LocalTime current = LocalTime.now();
 		LocalTime release = current.plusMinutes(30);
 		return release;
 	}
+	
 	/**
 	 * Returns account owner by its phone number
 	 * Reruns null if phone number not exists 
-	 * @param phoneNumer - account owner phone number
+	 * @param phoneNumer - account owner's phone number
 	 * @return
 	 */
 	public static AccountOwner getAccountOwnerByPhoneNumber(long phoneNumer) {
