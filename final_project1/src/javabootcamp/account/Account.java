@@ -7,18 +7,24 @@ import javabootcamp.actions.ActivityData;
 import javabootcamp.actions.ActivityName;
 
 public class Account {
-	//TODO enter id field
+	protected final long ACCOUNT_NUMBER;
+	protected static int accountCounter;
 	protected double balance;
 	protected AccountType accountType; 
-	protected ActivityData [] activityLog;
+	protected ActivityData [] activityLog = {};
 	protected  float interestRate;
 	protected  float operationFee;
 	
+	static {
+		accountCounter = 0;
+	}
 	public Account(AccountType accountType,float intersetRate, float operationFee) {
 		balance = 0;
 		this.accountType = accountType;
+		this.ACCOUNT_NUMBER = accountCounter;
 		setInterestRate(intersetRate);
 		setOperationFee(operationFee);
+		accountCounter++;
 	}
 	
 	public void setInterestRate(float interestRate) {
@@ -58,6 +64,10 @@ public class Account {
 		activityLog = updatedActivityLog;
 	}
 	
+	/**
+	 * Produce activity report
+	 * @param startDate
+	 */
 	public void produceActivityReportFromDate(LocalDate startDate) {
 		int index = findIndexOfStartDate(startDate);
 		if(index==-1)
@@ -66,30 +76,55 @@ public class Account {
 			displayActivitiesFromIndex(index);	
 	}
 	
+	/**
+	 * Finds date in activityLog array that starts from given startDate
+	 * @param startDate 
+	 * @return index of the date in the array
+	 */
 	private int findIndexOfStartDate(LocalDate startDate) {
 		for(int i=0; i<activityLog.length;i++)
-			if(activityLog[i].getTimeStemp().toLocalDate().equals(startDate))
+			if(activityLog[i].getTimeStemp().toLocalDate().compareTo(startDate)>=0)
 				return i;
 		return -1;
 	}
 	
+	/**
+	 * Display activities from activityLog from given index
+	 * @param index
+	 */
 	private void displayActivitiesFromIndex(int index) {
 		for(int i=index; i<activityLog.length; i++)
 			System.out.println(activityLog[i].toString());
 	}
 	
+	/**
+	 * Add amount to balance
+	 * @param amountToAdd
+	 */
 	public void addToBalance(double amountToAdd) {
 		balance += amountToAdd;
 	}
 	
+	/**
+	 * Subtract amount from balance
+	 * @param amountToSubtract
+	 */
 	public void subtractFromBalance(double amountToSubtract) {
 		balance -= amountToSubtract;
 	}
 	
+	/**
+	 * Add activity to activityLog array
+	 * @param activityName
+	 * @param balanceChange
+	 * @param additionalInfo
+	 */
 	public void addNewActivity(ActivityName activityName,double balanceChange,String additionalInfo) {
 		ActivityData activity = new ActivityData(activityName,balanceChange,additionalInfo);
 		addActivityToActivityLog(activity);	
 	}
+	
+	
 	
 	
 	
