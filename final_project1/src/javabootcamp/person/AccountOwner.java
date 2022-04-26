@@ -13,7 +13,11 @@ import javabootcamp.credentials.LogInCredentials;
 import javabootcamp.loan.Loan;
 import javabootcamp.menu.AppMenu;
 import javabootcamp.utils.Utils;
-
+/**
+ * Represents a person that owns account in the bank
+ * @author ketty
+ *
+ */
 public class AccountOwner extends Person{
 	
 	protected Account account = null;
@@ -180,6 +184,9 @@ public class AccountOwner extends Person{
 		payOperationRate();
 	}
 	
+	/**
+	 * Get loan from the bank
+	 */
 	private void getLoan() {
 		double loanAmount = Utils.scanDoubleOf("loan amount");
 		int payments = Utils.scanIntOf("amount of payments");
@@ -218,14 +225,30 @@ public class AccountOwner extends Person{
 		account.addNewActivity(activityName,balanceChange,notes);
 	}
 
+	/**
+	 * Create new activity and add it to activity log with manual notes
+	 * @param activityName
+	 * @param balanceChange
+	 * @param notes
+	 */
 	protected void submitNewActivity(ActivityName activityName,double balanceChange,String notes) {
 		account.addNewActivity(activityName,balanceChange,notes);
 	}
 	
+	/**
+	 * Create account for account owner 
+	 * @param accountType
+	 * @param intersetTare
+	 * @param operationFee
+	 */
 	protected void createAccountByManager(AccountType accountType,float intersetTare, float operationFee) {
 		account = new Account(accountType,intersetTare,operationFee);
 	}
 	
+	/**
+	 * Activates user selection from account owner menu
+	 * @param selection
+	 */
 	public void activateUserSelection(int selection) {
 		switch(selection) {
 		case 1:
