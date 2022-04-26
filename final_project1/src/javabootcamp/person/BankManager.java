@@ -1,19 +1,16 @@
 package javabootcamp.person;
 
-import java.time.LocalDate;
-import java.util.Scanner;
-
-
 import javabootcamp.account.AccountType;
+import javabootcamp.menu.AppMenu;
+import javabootcamp.utils.Utils;
 
 public class BankManager extends AccountOwner{
 	
 	protected AccountOwner [] usersToApprove = {};
 	
-	Scanner scannerManager = new Scanner(System.in);
-	
-	public BankManager(String firstName, String lastName, long phoneNumber, LocalDate birthDat, double monthlyIncome) {
-		super(firstName, lastName, phoneNumber, birthDat, monthlyIncome);
+	public BankManager() {
+		super("admin", "admin", 0000,null, 0);
+		createAccountByManager(AccountType.TITANIUM,0,0);
 	}
 	
 	public void addUsersToApprove(AccountOwner user) {
@@ -32,7 +29,6 @@ public class BankManager extends AccountOwner{
 			user.createAccountByManager(accountType, interestRate, operationFee);	
 		}
 		emptyUsersToApprove();
-		scannerManager.close();
 	}
 	
 	private AccountType classifyAccountType(double income) {
@@ -52,7 +48,7 @@ public class BankManager extends AccountOwner{
 		float interestRateMax = accountType.getMaxInterestRate();
 		while(true) {
 			System.out.println("Insert interest rate from the domain ["+interestRateMin+","+interestRateMax+")");
-			float interestRate = scannerManager.nextFloat();
+			float interestRate = Utils.scanner.nextFloat();
 			if(interestRate>=interestRateMin && interestRate<interestRateMax)
 				return interestRate;
 			System.out.println("input not valid, try again");
@@ -64,7 +60,7 @@ public class BankManager extends AccountOwner{
 		float operationFeeMax = accountType.getMaxOperationFee();
 		while(true) {
 			System.out.println("Insert interest rate from the domain ["+operationFeeMin+","+operationFeeMax+")");
-			float operationFee = scannerManager.nextFloat();
+			float operationFee = Utils.scanner.nextFloat();
 			if(operationFee>=operationFeeMin && operationFee<operationFeeMax)
 				return operationFee;
 			System.out.println("input not valid, try again");
@@ -75,6 +71,20 @@ public class BankManager extends AccountOwner{
 		AccountOwner [] emptyUsersToApprove = {};
 		usersToApprove = emptyUsersToApprove;
 		System.out.println("array empty : " + usersToApprove.length);
+	}
+	@Override
+	public void displaySelcetionMenu() {
+		AppMenu.displayBankManagerMenu();
+	}
+	
+	@Override
+	public void activateUserSelection(int selection) {
+		switch(selection) {
+		case 1:
+			setAndApproveAccount(); 
+			System.out.println("No more requests");
+			break;
+		}
 	}
 	
 
