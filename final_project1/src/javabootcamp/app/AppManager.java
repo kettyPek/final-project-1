@@ -16,25 +16,37 @@ public class AppManager {
 	
 	
 	protected AccountOwner currentUser = null;
-	protected AccountOwner [] users = {};
+	protected static AccountOwner [] users = {};
+	protected BankManager bankManager;
 	
 	public AppManager() {
-		defineBankManager();
+		this.bankManager = defineBankManager();
 	}
 	
-	private void defineBankManager() {
-		AccountOwner bankManager = new BankManager();
+	/**
+	 * Creates manual bank manager and add it to users array
+	 * @return
+	 */
+	private BankManager defineBankManager() {
+		BankManager bankManager = new BankManager();
 		bankManager.setCredentials("admin0", "admin0");
-		System.out.println("admin");
 		addUserToUsersArray(bankManager);
+		return bankManager;
 	}
 	
-	
+	/**
+	 * Starts application
+	 */
 	public void startApp() {
-		AppMenu.displayMainMenu();
-		activateMainMenuSelection();	
+		while(AppMenu.getMainMenuActivated()){
+			AppMenu.displayMainMenu();
+			activateMainMenuSelection();	
+		}
 	}
 	
+	/**
+	 * Activates options from the main menu by user input
+	 */
 	private void activateMainMenuSelection() {
 		int selection = Utils.scanner.nextInt();
 		switch(selection) {
@@ -47,35 +59,31 @@ public class AppManager {
 		case 3:
 			exitApp();
 			break;
+		default:
+			System.out.println("invalid input");
+			break;	
 		}
 	}
 	
-	private void enterSelectionMenu() {
-		currentUser.displaySelcetionMenu();
-		int selection = Utils.scanner.nextInt();
-		currentUser.activateUserSelection(selection);
-	}
-	
+	/**
+	 * Directs to account owner menu if credentials correct
+	 */
 	private void logIn() {
 		final int MAX_TRIES = 3;
 		int tries = 0;
 		while(tries<=MAX_TRIES) {
-			System.out.println("Enter username:");
-			String userName = Utils.scanner.next();
-			System.out.println("Enter password:");
-			String password = Utils.scanner.next();
-			credentialsAreCorrect(userName,password);
-			if(currentUser!=null)
-				break;
+			String userName = Utils.scanStringOf("username");
+			String password = Utils.scanStringOf("password");
+			if(userHasAccount(userName,password)) {
+				AppMenu.activateUserMenu(currentUser);
+				return;
+			}
 			else {
 				System.out.println("Inccorenct credentials, try again");
 				tries++;
-			}		
+			}
 		}
-		if(tries==3) 
-			System.out.println("You are blocked for 30 minutes, release time: " + getReleaseTimeAfterBlock());
-		else 
-			enterSelectionMenu();
+		System.out.println("You are blocked for 30 minutes, release time: " + getReleaseTimeAfterBlock()); 	
 	}
 	
 	private void openAccount() {
@@ -87,11 +95,17 @@ public class AppManager {
 			createAccountOwner(phoneNumber);
 			createCredentials();
 			addUserToUsersArray(currentUser);
+			System.out.println(users.length);
 			System.out.println("Request submitted successfully, manager aprroval required");
+			bankManager.addUsersToApprove(currentUser);
 		}
 	}
 		
+	/**
+	 * Exits application
+	 */
 	private void exitApp() {
+		AppMenu.exitMainMenu();
 		Utils.scanner.close();
 	}
 	//
@@ -112,7 +126,7 @@ public class AppManager {
 		LocalDate birthDate = LocalDate.parse(birthDateString);
 		System.out.println("Enter monthly income:");
 		double monthlyIncome = Utils.scanner.nextDouble();
-		currentUser = new AccountOwner(firstName, lastName, phoneNumber, birthDate, monthlyIncome);
+		currentUser = new AccountOwner(firstName, lastName, phoneNumber, birthDate, monthlyIncome,bankManager);
 	}
 	
 	private void createCredentials() {
@@ -121,21 +135,30 @@ public class AppManager {
 		do {
 			System.out.println("Enter username:");
 			username = Utils.scanner.next();
-			if(LogInCredentials.usernameIsValid(username)) {
-				if(userNameIsUnique(username)) {
-					do {
-						System.out.println("Enter password:");
-						password = Utils.scanner.next();
-						if(LogInCredentials.passwordIsValid(password))
-							currentUser.setCredentials(username, password);
-						else
-							System.out.println("password isnt valid, try again");
-					}while(!LogInCredentials.passwordIsValid(password));
-				}
+			if(usernameCanBeSet(username) )  {
+				do {
+					System.out.println("Enter password:");
+					password = Utils.scanner.next();
+					if(LogInCredentials.passwordIsValid(password))
+						currentUser.setCredentials(username, password);
+					else
+						System.out.println("password isnt valid, try again");
+				}while(!LogInCredentials.passwordIsValid(password));
 			}
 			else
 				System.out.println("username incorrect, try again");	
-		}while(!LogInCredentials.usernameIsValid(username));
+		}while(!usernameCanBeSet(username));
+	}
+	
+	private boolean userNameIsUnique(String username) {
+		for(AccountOwner user: users) 
+			if(user.getCredentials().getUsername().equals(username))
+				return false;
+		return true;	
+	}
+	
+	private boolean usernameCanBeSet(String username) {
+		return userNameIsUnique(username) && LogInCredentials.usernameIsValid(username);
 	}
 	
 	private void addUserToUsersArray(AccountOwner user) {
@@ -146,25 +169,54 @@ public class AppManager {
 		users = updatedUsers;	
 	}
 	
-	private boolean userNameIsUnique(String username) {
-		for(AccountOwner user: users) 
-			if(user.getCredentials().getUsername().equals(username))
-				return false;
-		return true;	
+	/**
+	 * Assign cuurentUser to be the account owner by given credentials and return true
+	 * @param userName
+	 * @param password
+	 */
+	private AccountOwner receiveUserByCredentials(String userName, String password) {
+		for(AccountOwner user : users) 
+			if(userName.matches(user.getCredentials().getUsername())) 
+				if(password.matches(user.getCredentials().getPassword())) 
+					return user;
+		return null;
 	}
 	
-	private void credentialsAreCorrect(String userName, String password) {
-		for(AccountOwner owner : users) 
-			if(userName.matches(owner.getCredentials().getUsername())) 
-				if(password.matches(owner.getCredentials().getPassword())) 
-					currentUser = owner;
+	/**
+	 * Checks if the user has account 
+	 * @param userName
+	 * @param password
+	 * @return - true if user has account, otherwise false
+	 */
+	private boolean userHasAccount(String userName, String password) {
+		AccountOwner user = receiveUserByCredentials(userName,password);
+		if(user != null) {
+			if(user.userHasAccount()) {
+				currentUser = user;
+				return true;
+			}
+		}
+		return false;
 	}
+	
+	
 	
 	private LocalTime getReleaseTimeAfterBlock() {
 		LocalTime current = LocalTime.now();
 		LocalTime release = current.plusMinutes(30);
 		return release;
 	}
-	
-	
+	/**
+	 * Returns account owner by its phone number
+	 * Reruns null if phone number not exists 
+	 * @param phoneNumer - account owner phone number
+	 * @return
+	 */
+	public static AccountOwner getAccountOwnerByPhoneNumber(long phoneNumer) {
+		for(AccountOwner owner: users) 
+			if(owner.getPhoneNumber()==phoneNumer)
+				return owner;
+		return null;
+	}
+		
 }
