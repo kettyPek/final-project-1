@@ -133,29 +133,27 @@ public class BankManager extends AccountOwner{
 	 * Add deposit funds to bank's balance
 	 * Add activity to activity log
 	 */
-	@Override
-	protected void deposit(double depositAmount) {
+	public void getLoanPayment(double depositAmount,long userNumber) {
 		account.addToBalance(depositAmount);
-		super.submitNewActivity(ActivityName.LOAN_PAYMENTS, depositAmount, "loan payment from aaaccount owner");
+		super.submitNewActivity(ActivityName.LOAN_PAYMENTS, depositAmount,"account "+Long.toString(userNumber));
 	}
 	
 	/**
 	 * Subtract withdrawal funds to bank's balance
 	 * Add activity to activity log
 	 */
-	@Override
-	protected void withdrawal(double withdrawalAmount){
+	public void giveLoan(double withdrawalAmount,long userNumber){
 		account.subtractFromBalance(withdrawalAmount);
-		super.submitNewActivity(ActivityName.GIVE_LOAN, withdrawalAmount, "given loan");
+		super.submitNewActivity(ActivityName.GIVE_LOAN, withdrawalAmount,"account "+Long.toString(userNumber));
 	}
 	
 	/**
 	 * Add given fee to bank account
 	 * @param operationFee
 	 */
-	protected void collectFee(double operationFee) {
+	public void collectFee(double operationFee,long userNumber) {
 		account.addToBalance(operationFee);
-		super.submitNewActivity(ActivityName.FEE_COLLECTION, operationFee, " ");
+		super.submitNewActivity(ActivityName.FEE_COLLECTION, operationFee,"account "+Long.toString(userNumber));
 	}
 	
 	/**

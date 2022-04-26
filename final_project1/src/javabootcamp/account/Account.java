@@ -57,6 +57,10 @@ public class Account {
 		return accountType;
 	}
 	
+	public long getAccountNumber() {
+		return ACCOUNT_NUMBER;
+	}
+	
 	/**
 	 * Adds new activity to activityLog array
 	 * @param activity - new activity to add

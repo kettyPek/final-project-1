@@ -1,11 +1,8 @@
 package javabootcamp.person;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-
 import javabootcamp.account.Account;
 import javabootcamp.account.AccountType;
-import javabootcamp.actions.ActivityData;
 import javabootcamp.actions.ActivityName;
 import javabootcamp.actions.BillType;
 import javabootcamp.app.AppManager;
@@ -182,6 +179,7 @@ public class AccountOwner extends Person{
 			submitNewActivity(ActivityName.PAY_BILL ,-1*billAmount);
 		}
 		payOperationRate();
+		System.out.println("You paid bill");
 	}
 	
 	/**
@@ -194,14 +192,14 @@ public class AccountOwner extends Person{
 			System.out.println("can not loan");
 			return;
 		}
-		double monthlyReturnAmount = (loanAmount/payments)*(account.getInterestRate()%100);
+		double monthlyReturnAmount = (loanAmount/payments)*(1+account.getInterestRate()*0.01);
 		loan = new Loan(loanAmount, payments, account.getInterestRate(),monthlyReturnAmount);
 		System.out.println("Amount of monthly return: " + monthlyReturnAmount);
 		account.addToBalance(loanAmount);
-		submitNewActivity(ActivityName.GET_LOAN,loanAmount);	
-		AccountOwner bankManager = AppManager.getAccountOwnerByPhoneNumber(0000);
-		bankManager.withdrawal(loanAmount);
+		submitNewActivity(ActivityName.GET_LOAN,loanAmount,"none");	
+		bankManager.giveLoan(loanAmount,account.getAccountNumber());
 		payOperationRate();
+		System.out.println("You got loan");
 	}
 	
 	/**
@@ -209,7 +207,7 @@ public class AccountOwner extends Person{
 	 */
 	private void payOperationRate() {
 		float operationRate = account.getOperationFee();
-		bankManager.collectFee(operationRate);
+		bankManager.collectFee(operationRate,account.getAccountNumber());
 		account.subtractFromBalance(operationRate);
 		submitNewActivity(ActivityName.FEE_PAYMENT,-1* operationRate," ");
 	}
@@ -302,7 +300,7 @@ public class AccountOwner extends Person{
 		if(loan!=null) {
 			loan.payLoan();
 			submitNewActivity(ActivityName.LOAN_PAYMENTS, loan.getMonthlyPayment(),"Loan payment");
-			bankManager.deposit(loan.getMonthlyPayment());
+			bankManager.getLoanPayment(loan.getMonthlyPayment(),account.getAccountNumber());
 		}
 		else
 			System.out.println("no loan");
