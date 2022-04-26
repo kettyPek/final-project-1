@@ -67,14 +67,24 @@ public abstract class AppMenu {
 		System.out.println("3 - log out");
 	}
 	
+	/**
+	 * Indicates that the user wants to exit the application
+	 */
 	public static void exitMainMenu() {
 		setMenusStatus(false,false);
 	}
 	
+	/**
+	 * Indicates that the user wants to exit the account menu
+	 */
 	public static void exitAccountOwnerMenu() {
 		setMenusStatus(true,false);
 	}
 	
+	/**
+	 * Activates account owner menu 
+	 * @param user
+	 */
 	public static void activateUserMenu(AccountOwner user) {
 		accountOwnerMenuActivated = true;
 		while(accountOwnerMenuActivated) {
