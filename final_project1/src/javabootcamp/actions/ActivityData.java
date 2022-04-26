@@ -1,7 +1,11 @@
 package javabootcamp.actions;
 
 import java.time.LocalDateTime;
-
+/**
+ * Represents activity made by account owner
+ * @author ketty
+ *
+ */
 public class ActivityData {
 	
 	protected ActivityName activityName;
