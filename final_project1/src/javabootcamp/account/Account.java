@@ -5,7 +5,12 @@ import java.time.LocalDateTime;
 
 import javabootcamp.actions.ActivityData;
 import javabootcamp.actions.ActivityName;
-
+/**
+ * Represents bank account 
+ * 
+ * @author ketty
+ *
+ */
 public class Account {
 	protected final long ACCOUNT_NUMBER;
 	protected static int accountCounter;
@@ -18,6 +23,7 @@ public class Account {
 	static {
 		accountCounter = 0;
 	}
+	
 	public Account(AccountType accountType,float intersetRate, float operationFee) {
 		balance = 0;
 		this.accountType = accountType;
@@ -51,9 +57,8 @@ public class Account {
 		return accountType;
 	}
 	
- 	//
 	/**
-	 * Add new activity to activityLog array
+	 * Adds new activity to activityLog array
 	 * @param activity - new activity to add
 	 */
 	private void addActivityToActivityLog(ActivityData activity) {
@@ -65,8 +70,8 @@ public class Account {
 	}
 	
 	/**
-	 * Produce activity report
-	 * @param startDate
+	 * Produce activity report that starts from given date 
+	 * @param startDate - date to display the report from
 	 */
 	public void produceActivityReportFromDate(LocalDate startDate) {
 		int index = findIndexOfStartDate(startDate);
@@ -77,9 +82,9 @@ public class Account {
 	}
 	
 	/**
-	 * Finds date in activityLog array that starts from given startDate
-	 * @param startDate 
-	 * @return index of the date in the array
+	 * Finds log in activityLog array that starts from given date 
+	 * @param startDate - date to display the activity log from
+	 * @return first index of a log that starts from given date, retrun -1 if there is no appropriate log
 	 */
 	private int findIndexOfStartDate(LocalDate startDate) {
 		for(int i=0; i<activityLog.length;i++)
@@ -89,8 +94,8 @@ public class Account {
 	}
 	
 	/**
-	 * Display activities from activityLog from given index
-	 * @param index
+	 * Display activities from activityLog array which starts from given index
+	 * @param index - index in activityLog 
 	 */
 	private void displayActivitiesFromIndex(int index) {
 		for(int i=index; i<activityLog.length; i++)
@@ -114,10 +119,10 @@ public class Account {
 	}
 	
 	/**
-	 * Add activity to activityLog array
-	 * @param activityName
-	 * @param balanceChange
-	 * @param additionalInfo
+	 * Creates new activity and adds activity to activityLog array
+	 * @param activityName - enum of activity type
+	 * @param balanceChange - change in balance after the activity
+	 * @param additionalInfo - additional info from the user
 	 */
 	public void addNewActivity(ActivityName activityName,double balanceChange,String additionalInfo) {
 		ActivityData activity = new ActivityData(activityName,balanceChange,additionalInfo);
