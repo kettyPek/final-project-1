@@ -8,6 +8,8 @@ public enum ActivityName {
 	GET_LOAN,
 	LOAN_PAYMENTS,
 	GIVE_LOAN,
+	FEE_COLLECTION,
+	FEE_PAYMENT,
 	TRANSFER,
 	PAY_BILL;
 
