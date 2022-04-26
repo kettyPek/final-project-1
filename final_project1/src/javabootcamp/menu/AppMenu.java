@@ -11,8 +11,9 @@ public class AppMenu {
 	 */
 	public static void displayMainMenu() {
 		System.out.println("please choose:");
-		System.out.println("1 - login");
+		System.out.println("1 - log in");
 		System.out.println("2 - open new account");
+		System.out.println("3 - log out");
 	}
 	
 	/**
@@ -28,6 +29,9 @@ public class AppMenu {
 		System.out.println("6 - pay bill");
 	}
 	
+	/**
+	 * Displays bank manager options menu
+	 */
 	public static void displayBankManagerMenu() {
 		System.out.println("please choose:");
 		System.out.println("1 - approve applicants");
